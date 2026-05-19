@@ -1,0 +1,47 @@
+defaults:
+  - _self_
+
+experiment_name: "midi_vae_2d"
+run_name: null
+seed: 42
+debug: False
+
+data:
+  roll_dir: "[YOUR_DATA_DIR]"               # root of processed dataset (must contain train/midi and validation/midi)
+  batch_size: 128
+  num_workers: 2
+  pin_memory: True
+
+model:
+  in_channels: 1
+  out_channels: 1
+  ch: 64
+  ch_mult: [1, 2, 2, 2]
+  ch_mult_1d: null
+  num_res_blocks: 2
+  z_channels: 8
+  kl_weight: 1e-8
+  binary_mode: True
+  attn_heads: 2
+  attn_dim_head: 16
+  loss_type: "bce"
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+
+training:
+  learning_rate: 2e-4
+  max_epochs: 200
+  accelerator: "gpu"
+  devices: 1
+  log_every_n_steps: 10
+  val_check_interval: 500
+  save_top_k: 3
+  gradient_clip_val: 1.0
+  precision: "bf16-mixed"
+  ema_decay: 0.99
+
+logging:
+  project: "midi-autoencoder"
+  entity: "[YOUR_WANDB_ENTITY]"             # your W&B username or team (set to null to skip W&B)
+  offline: False
+  save_dir: "[YOUR_LOG_DIR]"                # directory to save checkpoints and logs

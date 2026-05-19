@@ -1,0 +1,92 @@
+defaults:
+  - _self_
+
+run_name: null
+seed: 42
+
+data:
+  split_root: ???    # path to musicnet_em_preprocessed/{split_name} (output of musicnet_em_make_split.py)
+  unpaired_audio_dir: ???    # path to gm_preprocessed/audio (output of preprocess_gardner_museum.py)
+  unpaired_cqt_midi_ratio: 9  # subsample CQT so that midi:cqt = 1:9
+  train_batch_size: 32
+  valid_batch_size: 16
+  num_workers: 4
+  pin_memory: True
+
+model:
+  lambda_cqt: 5.0
+  lambda_midi: 5.0
+  pool_size: 128
+  vae_ckpt: null
+  use_ema: True
+
+  ema_beta: 0.99
+  ema_update_after_step: 500
+  ema_update_every: 10
+
+  gen_cqt_to_midi:
+    ngf: 32
+    ch_mult: [1, 2, 2, 4, 8]
+    num_res_blocks: 2
+    attn_heads: 2
+    attn_dim_head: 16
+    attn_start_level: 2
+
+  gen_midi_to_cqt:
+    ngf: 32
+    ch_mult: [1, 2, 2, 4, 8]
+    num_res_blocks: 2
+    attn_heads: 2
+    attn_dim_head: 16
+    attn_start_level: 2
+
+  disc_midi:
+    ndf: 64
+    n_layers: 5
+    scales: 2
+    kernel_size: [3, 3]
+    stride: [1, 1]
+    padding: [1, 1]
+    use_residual: true
+
+  disc_cqt:
+    ndf: 64
+    n_layers: 3
+    scales: 3
+    kernel_size: [3, 5]
+    stride: [2, 2]
+    padding: [1, 2]
+    use_residual: true
+
+  use_fm_loss: True
+  fm_ratio: 0.1
+
+training:
+  lambda_sup_midi: 1.0
+  lambda_sup_cqt: 1.0
+  min_per_inst: 5
+  num_train_steps: 1000000
+  learning_rate: 2e-4
+  beta1: 0.9
+
+  accelerator: "gpu"
+  devices: 1
+  num_nodes: 1
+
+  steps_per_checkpoint: 1000
+  vis_freq: 10000
+  max_grad_norm: 1.0
+  precision: "bf16-mixed"
+  accumulate_grad_batches: 1
+  d_steps_per_g_step: 1
+
+  gan_warmup_steps: 500
+  gan_warmup_min_weight: 0.1
+  warmup_steps: 500
+  resume_ckpt: null
+
+logging:
+  project: "musicnet_em"
+  entity: "[YOUR_WANDB_ENTITY]"             # your W&B username or team (set to null to skip W&B)
+  offline: False
+  save_dir: "./logs/cycle_em"
