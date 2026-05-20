@@ -7,6 +7,8 @@
 > Cornell University  
 > *Preprint*
 
+![Overview](figures/overview.png)
+
 We adopt a cycle-consistent translation framework in which a small amount of paired audio–score data acts as a minimal anchor, unlocking the full potential of unpaired recordings and symbolic scores for automatic music transcription.
 
 ---
