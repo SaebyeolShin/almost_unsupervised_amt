@@ -7,7 +7,7 @@
 > **Music Transcription with (Almost) No Supervision**  
 > Saebyeol Shin, Chao Wan, Zhenzhen Liu, Justin Lovelace, Daniel C. Lin, Kilian Q. Weinberger, John Thickstun  
 > Cornell University  
-> *Preprint*
+> [arXiv](https://arxiv.org/abs/2605.24193)
 
 ![Overview](figures/overview.png)
 
